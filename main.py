@@ -13,31 +13,32 @@ class Stack:
         else:
             return False
 
-    def push(self) -> None:
+    def push(self, new_element) -> None:
 
         '''Добавляет новый элемент на вершину стека. Метод ничего не возвращает.'''
 
-        pass
-
-    def _element_search(self):
-        pass
-
-    def pop(self) -> str:
-
-        '''Удаляет верхний элемент стека. Стек изменяется. Метод возвращает верхний элемент стека.'''
-
-        print(self.string[::-1])
-        print('Объект класса: ', self.string)
         for index, element in enumerate(self.string):
             if index == 0:
                 continue
             element_stack = element + self.string[index-1]
 
             if element_stack in ['{}', '[]', '()']:
-                end = index - 1
-                begin = index + 1
-                self.string = self.string[:end] + self.string[begin:]
-                print('В классе удаление: ', self.string)
+                self.string = self.string[:index] + new_element[::-1] + self.string[index:]
+                break
+
+    def pop(self) -> str:
+
+        '''Удаляет верхний элемент стека. Стек изменяется. Метод возвращает верхний элемент стека.'''
+
+        for index, element in enumerate(self.string):
+            if index == 0:
+                continue
+            element_stack = element + self.string[index-1]
+
+            if element_stack in ['{}', '[]', '()']:
+                first_index = index - 1
+                second_index = index + 1
+                self.string = self.string[:first_index] + self.string[second_index:]
                 return element_stack
 
     def peek(self) -> str:
@@ -45,8 +46,6 @@ class Stack:
         '''Возвращает верхний элемент стека, но не удаляет его. Стек не меняется.'''
 
         for index, element in enumerate(self.string):
-            if index == len(self.string) - 1:
-                break
             if index == 0:
                 continue
             element_stack = element + self.string[index-1]
@@ -78,24 +77,18 @@ list_of_strings = [
 
 
 if __name__ == '__main__':
-    a = Stack(list_of_strings[0])
-    b = Stack(list_of_strings[0])
-    c = Stack(list_of_strings[4])
-    d = Stack(list_of_strings[2])
-    #print(a.is_empty(), b.is_empty())
+    c = Stack(list_of_strings[1])
 
-    '''print(b.peek())
+    print(c.string[::-1])
+    print(c.is_empty())
     print(c.peek())
-    print(d.peek())
+    print(c.size())
+    print('*' * 40)
 
-    print(c.pop())
-    print(c.pop())
-    print(c.pop())'''
-    print(c.size())
-    print(c.pop())
-    print(c.pop())
-    print(c.pop())
-    print(c.pop())
-    print(c.pop())
-    print(c.pop())
-    print(c.size())
+    for i in range(c.size()):
+        print(c.string[::-1])
+        print('Удалён ', c.pop())
+        print('Следующий ', c.peek())
+        print('-' * 40)
+
+    print('Наша строка', c.string[::-1])

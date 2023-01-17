@@ -1,8 +1,14 @@
 class Stack:
 
+    '''Класс для работы со стеком'''
+
+    id = 0
+
     def __init__(self, string):
 
         self.string = string[::-1]
+        self.id = Stack.id + 1
+        Stack.id += 1
 
     def is_empty(self) -> bool:
 
@@ -28,7 +34,9 @@ class Stack:
 
     def pop(self) -> str:
 
-        '''Удаляет верхний элемент стека. Стек изменяется. Метод возвращает верхний элемент стека.'''
+        '''Удаляет верхний элемент стека. Стек изменяется. Метод возвращает верхний элемент стека или
+        
+        None, если элемента для удаленя нет.'''
 
         for index, element in enumerate(self.string):
             if index == 0:
@@ -43,7 +51,9 @@ class Stack:
 
     def peek(self) -> str:
         
-        '''Возвращает верхний элемент стека, но не удаляет его. Стек не меняется.'''
+        '''Возвращает верхний элемент стека, но не удаляет его, 
+        
+        либо None, если нет элемента в стеке. Стек не меняется.'''
 
         for index, element in enumerate(self.string):
             if index == 0:
@@ -55,7 +65,9 @@ class Stack:
             
     def size(self) -> int:
         
-        '''Возвращает количество элементов в стеке.'''
+        '''Возвращает количество элементов в стеке. 
+        
+        Либо None если скобки не парные.'''
 
         count_tuple = self.string.count('(') + self.string.count(')')
         count_list = self.string.count('[') + self.string.count(']')
@@ -70,25 +82,40 @@ list_of_strings = [
     '(((([{}]))))',
     '[([])((([[[]]])))]{()}',
     '{{[()]}}',
+    '[[({)(})]]',
     '}{}',
     '{{[(])]}}',
     '[[{())}]'
 ]
 
 
+def main():
+
+    for string in list_of_strings:
+        object = Stack(string)
+        if object.is_empty():
+            checking_the_balance(object)
+        else:
+            print(f'Стек №{object.id} пустой')
+
+
+def checking_the_balance(object: Stack) -> None:
+
+    '''Проверка стека на сбалансированность.'''
+
+    text = object.string[::-1]
+    if object.size():
+        for _ in range(object.size()):
+            if object.peek():
+                object.pop()
+            else:
+                print(f'Стек №{object.id}', 'Несбалансированно ', text)
+                break
+        else:
+            print(f'Стек №{object.id}', 'Сбалансированно ', text) 
+    else:
+        print(f'Стек №{object.id}', 'Несбалансированно ', text)
+
+
 if __name__ == '__main__':
-    c = Stack(list_of_strings[1])
-
-    print(c.string[::-1])
-    print(c.is_empty())
-    print(c.peek())
-    print(c.size())
-    print('*' * 40)
-
-    for i in range(c.size()):
-        print(c.string[::-1])
-        print('Удалён ', c.pop())
-        print('Следующий ', c.peek())
-        print('-' * 40)
-
-    print('Наша строка', c.string[::-1])
+    main()

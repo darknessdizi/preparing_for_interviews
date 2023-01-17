@@ -1,2 +1,4 @@
 documents/
 env/
+password.py
+__pycache__/
